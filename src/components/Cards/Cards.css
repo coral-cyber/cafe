@@ -1,0 +1,48 @@
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.desc {
+  font-size: 14px;
+  color: #555;
+  margin: 8px 0;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.price {
+  font-weight: bold;
+  color: rgb(97, 47, 5);
+  font-size: 18px;
+}
+
+.calories {
+  color: #d68f00;
+  font-size: 16px;
+}
