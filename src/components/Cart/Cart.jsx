@@ -1,51 +1,6 @@
-// import React, { useState } from "react";
-// import Cards from "../Cards/Cards";
-// import { BsWhatsapp } from "react-icons/bs";
-// function Cart({ items = [] }) {
-//   const [cart, setCart] = useState([]);
-
-//   const addItem = (item) => {
-//     setCart((prev) => [...prev, item]);
-//   };
-
-//   const sendWh = () => {
-//     if (cart.length === 0) alert("Cart is empty. Add items first.");
-//     return;
-
-//     const phone = "918767971866";
-//     let total = 0;
-
-//     const itemLines = cart.map((item, i) => {
-//       total += item.price;
-//       return `${i + 1}. ${item.name} - $${item.price}`;
-//     });
-
-//     const message = `New Order\n${itemLines.join("\n")}\nTotal: $${total}`;
-
-//     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-//     window.open(url, "_blank");
-//   };
-
-//   return (
-//     <div className="grid gap-2">
-//       {/* ✅ PASS ARRAY, DO NOT MAP */}
-//       <Cards items={items} onAdd={addItem} />
-
-//       <button
-//         onClick={sendWh}
-//         className="p-3 flex justify-center rounded-full items-center fixed bottom-4 left-4 z-9999 bg-green-600 h-16 w-16  "
-//       >
-//         <BsWhatsapp className="bg-green-600 h-14 w-14  " />
-//       </button>
-//       <p>Cart items: {cart.length}</p>
-//     </div>
-//   );
-// }
-
-// export default Cart;
 import { BsWhatsapp } from "react-icons/bs";
 
-function Cart({ isOpen, onClose, cart }) {
+function Cart({ isOpen, onClose, cart, onRemove }) {
   if (!isOpen) return null;
 
   const sendWh = () => {
@@ -70,33 +25,89 @@ function Cart({ isOpen, onClose, cart }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40">
-      <div className="absolute right-0 top-0 h-full w-80 bg-white p-4 shadow-lg">
-        <button onClick={onClose} className="mb-4 text-right w-full">
-          ❌ Close
-        </button>
+    <>
+      {/* BACKDROP */}
+      <div className="fixed inset-0 z-40 bg-black/50" onClick={onClose} />
 
-        <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
+      {/* DRAWER */}
+      <div
+        className="
+          fixed right-0 top-0 z-50
+          h-full w-full sm:w-96
+          bg-white shadow-xl
+          flex flex-col
+        "
+      >
+        {/* HEADER */}
+        <div className="flex items-center justify-between px-4 py-3 border-b">
+          <h2 className="text-lg font-semibold">Your Cart</h2>
+          <button
+            onClick={onClose}
+            className="text-sm text-gray-500 hover:text-black"
+          >
+            ✕
+          </button>
+        </div>
 
-        {cart.length === 0 && <p>No items added</p>}
+        {/* CONTENT */}
+        <div className="flex-1 overflow-y-auto p-4">
+          {cart.length === 0 ? (
+            <p className="text-center text-gray-500 mt-10">No items added</p>
+          ) : (
+            <ul className="space-y-3">
+              {cart.map((item, i) => (
+                <li
+                  key={i}
+                  className="
+                    border rounded-lg p-3
+                    flex justify-between items-center
+                  "
+                >
+                  <div>
+                    <p className="font-medium text-sm">{item.name}</p>
+                    <p className="text-sm text-amber-700 font-semibold">
+                      ${item.price}
+                    </p>
+                  </div>
 
-        <ul className="space-y-2">
-          {cart.map((item, i) => (
-            <li key={i} className="border p-2 rounded">
-              <p className="font-medium">{item.name}</p>
-              <p>${item.price}</p>
-            </li>
-          ))}
-        </ul>
+                  <button
+                    onClick={() => onRemove(i)}
+                    className="
+                      text-xs text-red-600
+                      px-3 py-1
+                      rounded
+                      hover:bg-red-50
+                    "
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-        <button
-          onClick={sendWh}
-          className="mt-6 w-full bg-green-600 text-white py-3 rounded flex justify-center"
-        >
-          <BsWhatsapp size={22} />
-        </button>
+        {/* FOOTER */}
+        <div className="p-4 border-t">
+          <button
+            onClick={sendWh}
+            className="
+              w-full
+              bg-green-600 text-white
+              py-3 rounded-xl
+              flex items-center justify-center gap-2
+              text-sm font-medium
+              hover:bg-green-500
+              active:scale-95
+              transition
+            "
+          >
+            <BsWhatsapp size={20} />
+            Order on WhatsApp
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
